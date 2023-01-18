@@ -438,12 +438,6 @@ app.post("/creatorData", (req, res) => {
   })
 })
 
-app.get('/deleteCookie', (request, response) => {
-  response.clearCookie('access-token');
-  response.send('Cookie cleared');
-});
-
-
 app.listen(process.env.PORT, () => {
     console.log("running server")
 })
