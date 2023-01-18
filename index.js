@@ -439,5 +439,5 @@ app.post("/creatorData", (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
-    console.log("running server")
+    console.log("Server running...")
 })
