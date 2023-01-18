@@ -1,9 +1,10 @@
 const {sign, verify} = require('jsonwebtoken')
+require("dotenv").config()
 
 const createTokens = (user) => {
     const accessToken = sign(
         { id: user.id }, 
-        "iajwhuAAJGFAGPHireherheurtiosjagawgwegwjzrtujejetjetjetawrgaiozuwrgZUßÜöawrfaäawfaöfwapßZaiowiuiuhuoioäü+ijhuzuazguwtfzafasbhdbZTTWZTAVGDSAVGVG!Uhhuiaf#a,faw",
+        process.env.token,
     )
     return accessToken
 }
@@ -14,7 +15,7 @@ const validateToken = (req, res, next) => {
     if(!accessToken) return res.json({auth: false})
 
     try{
-        const validToken = verify(accessToken, "iajwhuAAJGFAGPHireherheurtiosjagawgwegwjzrtujejetjetjetawrgaiozuwrgZUßÜöawrfaäawfaöfwapßZaiowiuiuhuoioäü+ijhuzuazguwtfzafasbhdbZTTWZTAVGDSAVGVG!Uhhuiaf#a,faw")
+        const validToken = verify(accessToken, process.env.token)
         if(validToken) {
             res.json({auth: true})
             return next()
