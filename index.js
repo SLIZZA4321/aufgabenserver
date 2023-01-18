@@ -1,10 +1,8 @@
 const express = require("express")
 const cors = require("cors")
-const { createTokens, validateToken } = require("./JWT")
 require("dotenv").config()
 
 const bodyParser = require("body-parser")
-const cookieParser = require("cookie-parser")
 const bcrypt = require("bcryptjs")
 
 const app = express()
@@ -13,12 +11,11 @@ const db = require("./db")
 app.use(express.json())
 app.use(
     cors({
-        origin: ["https://main--singular-florentine-1c2938.netlify.app", "https://singular-florentine-1c2938.netlify.app"],
+        origin: process.env.ORIGIN,
         methods: ["GET", "POST"],
         credentials: true,
     })
 )
-app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.post("/register", (req, res) => {
@@ -92,22 +89,6 @@ app.post("/login", (req, res) => {
             console.log(error)
           }
           if (response) {
-          const accessToken = createTokens(result[0])
-          
-          res.cookie("access-token", accessToken, {
-              maxAge: 10000,
-              httpOnly: true,
-              secure: true,
-              domain: "newserver.service-aufgabenserver.de"
-          })
-          db.query("UPDATE users SET cookie = ? WHERE id = ?", 
-          [accessToken, result[0].id],
-          (err, res) => {
-            if(err) {
-              res.send(err)
-            }
-          }
-          )
             res.json({ loggedIn: true, message: "Logged In", id: result[0].id})
           } else {
             res.json({loggedIn: false, message: "Wrong Username/Password combination"})
@@ -135,16 +116,6 @@ app.post("/user", (req, res) => {
   )
 })
 
-app.get("/profile", validateToken, (req, res) => {
-  (err, result) => {
-    if(result) {
-      res.json(result)
-    }
-    if(err) {
-      res.json(err)
-    }
-  }
-})
 
 app.post("/tasks", (req, res) => {
   const {id, title, text,tags, completed, createdBy, time, date} = req.body
