@@ -7,11 +7,6 @@ const db = mysql.createConnection({
     password: process.env.PASSWORD,
     database: process.env.DB,
 })
-bff893ba35e024
-eu-cdbr-west-03.cleardb.net
-d7e0544c
-heroku_fac07016e52dfdd
-
 
 module.exports = db
 
